@@ -28,4 +28,31 @@ function createBinaryTree (list) {
   return root
 }
 
-console.log(createBinaryTree([3, 2, 9, null, null, 10, null, null, 8, null, 4]))
+function preOrderTraveral (node) {
+  if (node === null) return
+  console.log(node.value)
+  preOrderTraveral(node.left)
+  preOrderTraveral(node.right)
+}
+
+function middleOrderTraveral (node) {
+  if (node === null) return
+
+  middleOrderTraveral(node.left)
+  console.log(node.value)
+  middleOrderTraveral(node.right)
+}
+
+function backOrderTraveral (node) {
+  if (node === null) return
+
+  backOrderTraveral(node.left)
+  backOrderTraveral(node.right)
+  console.log(node.value)
+}
+
+const tree = createBinaryTree([3, 2, 9, null, null, 10, null, null, 8, null, 4])
+
+console.log('前序遍历', preOrderTraveral(tree))
+console.log('中序遍历', middleOrderTraveral(tree))
+console.log('后序遍历', backOrderTraveral(tree))
