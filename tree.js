@@ -53,6 +53,53 @@ function backOrderTraveral (node) {
 
 const tree = createBinaryTree([3, 2, 9, null, null, 10, null, null, 8, null, 4])
 
-console.log('前序遍历', preOrderTraveral(tree))
-console.log('中序遍历', middleOrderTraveral(tree))
-console.log('后序遍历', backOrderTraveral(tree))
+// console.log('前序遍历', preOrderTraveral(tree))
+// console.log('中序遍历', middleOrderTraveral(tree))
+// console.log('后序遍历', backOrderTraveral(tree))
+
+function preOrderTraveralNotRecur (node) {
+  const queue = []
+
+  while (node || queue.length) {
+    while (node) {
+      queue.push(node)
+      node = node.left
+    }
+
+    if (queue.length) {
+      node = queue.pop()
+      console.log(node.value)
+      node = node.right
+    }
+
+  }
+}
+
+// console.log('前序遍历不用递归')
+// preOrderTraveralNotRecur(tree)
+
+function middleOrderTraveralNotRecur (node) {
+  const queue = []
+  const backOrderQueue = []
+  while (node || queue.length) {   //  我觉得这种写法的有趣的地方在于用了两个while判断条件  然后两个条件搭配执行 得出更牛皮的效果
+    while (node) {
+      queue.push(node)
+      backOrderQueue.push(node)
+      node = node.right
+    }
+
+    if (queue.length) {
+      const currentNode = queue.pop()
+      node = currentNode.left
+    }
+  }
+
+  while (backOrderQueue.length) {
+    const current = backOrderQueue.pop()
+
+    console.log(current.value)
+  }
+}
+
+console.log('后续遍历不用递归')
+middleOrderTraveralNotRecur(tree)
