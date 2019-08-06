@@ -78,6 +78,10 @@ function preOrderTraveralNotRecur (node) {
 // console.log('前序遍历不用递归')
 // preOrderTraveralNotRecur(tree)
 
+/**
+ * 后序遍历的思路： 我们可以利用栈存放一个这样的循序的数据： 左 => 右 => 根  或者  右 => 左 => 根
+ * @param {Node} node 
+ */
 function middleOrderTraveralNotRecur (node) {
   const queue = []
   const backOrderQueue = []
