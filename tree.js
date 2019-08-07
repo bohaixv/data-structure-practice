@@ -101,5 +101,49 @@ function middleOrderTraveralNotRecur (node) {
   }
 }
 
-console.log('后续遍历不用递归')
-middleOrderTraveralNotRecur(tree)
+// console.log('后续遍历不用递归')
+// middleOrderTraveralNotRecur(tree)
+
+function layerTraveralNotRecur (node) {
+  const queue = []
+
+  queue.push(node)
+
+  while (queue.length) {
+    const currentNode = queue.shift()
+
+    console.log(currentNode.value)
+    if (currentNode.left) queue.push(currentNode.left)
+    if (currentNode.right) queue.push(currentNode.right)
+  }
+}
+
+// console.log('层序遍历  广度优先')
+// layerTraveralNotRecur(tree)
+
+function layerTraveralRecur () {
+
+  function layer (tree, n) {
+    if (!tree) return
+    if (n === 0) console.log(tree.value)
+
+    layer(tree.left, n - 1)
+    layer(tree.right, n - 1)
+  }
+
+
+  function getDeep (tree, n = 0) {
+    if (tree) n += 1
+    else return n
+
+    return Math.max(getDeep(tree.left, n), getDeep(tree.right, n))
+  }
+  const deep = getDeep(tree)
+
+  for (let i = 0; i < deep; i++) {
+    layer(tree, i)
+  }
+}
+
+console.log('层序遍历 结合递归方式实现')
+layerTraveralRecur(tree)
