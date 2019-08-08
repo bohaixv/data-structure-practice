@@ -149,5 +149,43 @@ function layerTraveralRecur () {
   }
 }
 
-console.log('层序遍历 结合递归方式实现')
-layerTraveralRecur(tree)
+// console.log('层序遍历 结合递归方式实现')
+// layerTraveralRecur(tree)
+
+/**
+ * 二叉堆
+ */
+class DoubleBranchHeap {
+  constructor (arr) {
+    this.heap = [...arr]
+    this.size = arr.length
+  }
+
+  downAdjust (index) {
+    if (index >= this.size) return
+
+    let parentIndex = index
+    let childIndex = index * 2 + 1
+
+    const tmp = this.heap[parentIndex]
+
+    while (childIndex < this.size) {
+      if (childIndex + 1 < this.size && this.heap[childIndex + 1] > this.heap[childIndex]) {
+        childIndex++
+      }
+
+      if (tmp > this.heap[childIndex]) break
+
+      this.heap[childIndex] = this.heap[parentIndex]
+
+      parentIndex = childIndex
+      childIndex = 2 * childIndex + 1
+    }
+
+    this.heap[parentIndex] = tmp
+  }
+}
+
+const heap = new DoubleBranchHeap([1, 3, 2, 6, 5, 7, 8, 9, 10])
+
+heap.downAdjust(2)
