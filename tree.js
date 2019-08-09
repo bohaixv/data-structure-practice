@@ -158,11 +158,31 @@ function layerTraveralRecur () {
 class DoubleBranchHeap {
   constructor (arr) {
     this.heap = [...arr]
-    this.size = arr.length
   }
 
-  downAdjust (index) {
-    if (index >= this.size) return
+  get size () {
+    return this.heap.length
+  }
+
+  upAdjust (index) {   // 『上浮操作』  将指定索引进行上浮操作
+    if (index > this.size) return
+
+    let childIndex = index
+    let parentIndex = Math.floor((childIndex - 1) / 2)
+
+    const tmp = this.heap[index]
+
+    while (childIndex > 0 && tmp > this.heap[parentIndex]) {
+      this.heap[childIndex] = this.heap[parentIndex]
+      childIndex = parentIndex
+      parentIndex = Math.floor((parentIndex - 1) / 2)
+    }
+
+    this.heap[childIndex] = tmp
+  }
+
+  downAdjust (index) {   //  『下沉操作』 将指定索引的节点下沉
+    if (index > this.size) return
 
     let parentIndex = index
     let childIndex = index * 2 + 1
@@ -176,7 +196,7 @@ class DoubleBranchHeap {
 
       if (tmp > this.heap[childIndex]) break
 
-      this.heap[childIndex] = this.heap[parentIndex]
+      this.heap[parentIndex] = this.heap[childIndex]
 
       parentIndex = childIndex
       childIndex = 2 * childIndex + 1
@@ -184,8 +204,46 @@ class DoubleBranchHeap {
 
     this.heap[parentIndex] = tmp
   }
+
+  rebuild () {
+    const lastNotLeafIndex = Math.floor(this.size / 2)
+
+    for (let i = lastNotLeafIndex; i >= 0; i--) {
+      this.downAdjust(i)
+    }
+  }
+
+  sort () {   // 利用完整二叉堆的性质 。  不断将更新根元素， 因为根元素是最大or最小的。
+    this.rebuild()
+    const arr = []
+    for (let i = this.size - 1; this.size > 0; i--) {
+      this.swap(0, i)
+      arr.push(...this.heap.splice(i, 1))
+      this.downAdjust(0)
+    }
+    console.log(arr)
+
+    this.heap = arr
+  }
+
+  deleteItem (index) {
+    if (index > this.size) return
+
+    this.swap(index, this.size - 1)
+
+    this.heap.splice(this.size - 1, 1)
+
+    this.downAdjust(index)
+  }
+
+  insertItem (node) {
+    this.heap[this.size] = node
+    this.upAdjust(this.size - 1)
+  }
+
+  swap (front, back) {
+    const temp = this.heap[front]
+    this.heap[front] = this.heap[back]
+    this.heap[back] = temp
+  }
 }
-
-const heap = new DoubleBranchHeap([1, 3, 2, 6, 5, 7, 8, 9, 10])
-
-heap.downAdjust(2)
