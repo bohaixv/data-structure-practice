@@ -28,36 +28,36 @@ function createBinaryTree (list) {
   return root
 }
 
-function preOrderTraveral (node) {
+function preOrderTraversal (node) {
   if (node === null) return
   console.log(node.value)
-  preOrderTraveral(node.left)
-  preOrderTraveral(node.right)
+  preOrderTraversal(node.left)
+  preOrderTraversal(node.right)
 }
 
-function middleOrderTraveral (node) {
+function middleOrderTraversal (node) {
   if (node === null) return
 
-  middleOrderTraveral(node.left)
+  middleOrderTraversal(node.left)
   console.log(node.value)
-  middleOrderTraveral(node.right)
+  middleOrderTraversal(node.right)
 }
 
-function backOrderTraveral (node) {
+function backOrderTraversal (node) {
   if (node === null) return
 
-  backOrderTraveral(node.left)
-  backOrderTraveral(node.right)
+  backOrderTraversal(node.left)
+  backOrderTraversal(node.right)
   console.log(node.value)
 }
 
 const tree = createBinaryTree([3, 2, 9, null, null, 10, null, null, 8, null, 4])
 
-// console.log('前序遍历', preOrderTraveral(tree))
-// console.log('中序遍历', middleOrderTraveral(tree))
-// console.log('后序遍历', backOrderTraveral(tree))
+// console.log('前序遍历', preOrderTraversal(tree))
+// console.log('中序遍历', middleOrderTraversal(tree))
+// console.log('后序遍历', backOrderTraversal(tree))
 
-function preOrderTraveralNotRecur (node) {
+function preOrderTraversalNotRecur (node) {
   const queue = []
 
   while (node || queue.length) {
@@ -76,13 +76,13 @@ function preOrderTraveralNotRecur (node) {
 }
 
 // console.log('前序遍历不用递归')
-// preOrderTraveralNotRecur(tree)
+// preOrderTraversalNotRecur(tree)
 
 /**
  * 后序遍历的思路： 我们可以利用栈存放一个这样的循序的数据： 左 => 右 => 根  或者  右 => 左 => 根
  * @param {Node} node 
  */
-function middleOrderTraveralNotRecur (node) {
+function middleOrderTraversalNotRecur (node) {
   const queue = []
   const backOrderQueue = []
   while (node || queue.length) {   //  我觉得这种写法的有趣的地方在于用了两个while判断条件  然后两个条件搭配执行 得出更牛皮的效果
@@ -106,9 +106,9 @@ function middleOrderTraveralNotRecur (node) {
 }
 
 // console.log('后续遍历不用递归')
-// middleOrderTraveralNotRecur(tree)
+// middleOrderTraversalNotRecur(tree)
 
-function layerTraveralNotRecur (node) {
+function layerTraversalNotRecur (node) {
   const queue = []
 
   queue.push(node)
@@ -123,9 +123,9 @@ function layerTraveralNotRecur (node) {
 }
 
 // console.log('层序遍历  广度优先')
-// layerTraveralNotRecur(tree)
+// layerTraversalNotRecur(tree)
 
-function layerTraveralRecur () {
+function layerTraversalRecur () {
 
   function layer (tree, n) {
     if (!tree) return
@@ -150,7 +150,7 @@ function layerTraveralRecur () {
 }
 
 // console.log('层序遍历 结合递归方式实现')
-// layerTraveralRecur(tree)
+// layerTraversalRecur(tree)
 
 /**
  * 二叉堆
