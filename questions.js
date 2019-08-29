@@ -68,7 +68,7 @@ function getLinkCycleLength (link) {
   return length
 }
 
-console.log('link cycle length :', getLinkCycleLength(linkList))
+// console.log('link cycle length :', getLinkCycleLength(linkList))
 
 /**
  * 获取链表环的重复节点   追击问题  通过画图可以得出相关的结论
@@ -99,4 +99,94 @@ function getCycleRepeatNode (link) {
   return encounter
 }
 
-console.log('出入节点为：', getCycleRepeatNode(linkList))
+// console.log('出入节点为：', getCycleRepeatNode(linkList))
+
+
+/**
+ * 定义一个栈，入栈和出栈的时间复杂度是O(1)，同时拥有一个getMin函数，该函数的时间复杂度也是1
+ */
+
+class MinStack {
+  constructor () {
+    this.stack = []
+    this.minStack = []
+  }
+
+  push (value) {
+    this.stack.push(value)
+
+    if (this.minStack.length && this.minStack[this.minStack.length - 1] > value || !this.minStack.length) {
+      this.minStack.push(value)
+    }
+  }
+
+  pop () {
+    const value = this.stack.pop()
+    if (value === this.minStack[this.minStack.length - 1]) this.minStack.pop()
+  }
+
+  getMin () {
+    return this.minStack[this.minStack.length - 1]
+  }
+}
+
+
+const stack = new MinStack()
+stack.push(10)
+stack.push(6)
+stack.push(3)
+stack.push(5)
+stack.push(8)
+
+stack.pop()
+stack.pop()
+stack.pop()
+
+// console.log('最小栈的最小值是', stack.getMin())
+
+
+/**
+ * 求最大公约数
+ */
+
+function getMaxConventionNumber (num1, num2) {
+  let big, small
+  if (num1 > num2) {
+    big = num1
+    small = num2
+  } else {
+    big = num2
+    small = num1
+  }
+
+  for (let i = Math.floor(small / 2); i <= small / 2; i--) {
+    if (big % i === 0 && small % i === 0) {
+      return i
+    }
+  }
+
+  return false
+}
+
+// console.log('max convention number: ', getMaxConventionNumber(33, 77))
+
+/**
+ * 欧几里得最大公约数
+ */
+function euclidMaxConventionNumber (num1, num2) {
+  if (num1 === 1 || num2 === 1) return 1
+
+  const flag = num1 > num2
+
+  let remainder
+  if (flag) {
+    remainder = num1 % num2
+  } else {
+    remainder = num2 % num1
+  }
+
+  if (remainder === 0) return flag ? num2 : num1
+  return euclidMaxConventionNumber(flag ? num2 : num1, remainder)
+}
+
+console.log('euclid max convention number:', euclidMaxConventionNumber(99, 72))
