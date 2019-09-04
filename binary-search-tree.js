@@ -28,6 +28,33 @@ class BinarySearchTree {
     }
   }
 
+  delete (key) {
+    let current = this.root
+    let parent = null
+    let position
+
+    while (current) {
+      if (current.key === key) {
+        parent[position] = current.left || current.right
+
+        return true
+      }
+
+      if (current.key > key) {
+        position = 'left'
+        parent = current
+        current = current.left
+      }
+
+      if (current.key < key) {
+        position = 'right'
+        parent = current
+        current = current.right
+      }
+    }
+
+    return false
+  }
 }
 
 
@@ -35,7 +62,7 @@ const binarySearchTree = new BinarySearchTree(8)
 
 binarySearchTree.insertNode(5)
 binarySearchTree.insertNode(6)
+
 binarySearchTree.insertNode(9)
 binarySearchTree.insertNode(10)
-
 console.log('binary search tree:', binarySearchTree)

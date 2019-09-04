@@ -189,4 +189,18 @@ function euclidMaxConventionNumber (num1, num2) {
   return euclidMaxConventionNumber(flag ? num2 : num1, remainder)
 }
 
-console.log('euclid max convention number:', euclidMaxConventionNumber(99, 72))
+// console.log('euclid max convention number:', euclidMaxConventionNumber(9, 12))
+
+
+/**
+ * 更相减损术  和欧几里得类似   就是互相想减 直到为0 时的结果为最大公约数
+ */
+function subtraction (num1, num2) {
+  if (num1 === num2) return num1
+  const max = num1 > num2 ? num1 : num2
+  const min = num1 > num2 ? num2 : num1
+
+  return subtraction(max - min, min)
+}
+
+console.log('更相相减求最大公约数', subtraction(88, 72))
