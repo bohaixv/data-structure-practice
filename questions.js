@@ -203,4 +203,76 @@ function subtraction (num1, num2) {
   return subtraction(max - min, min)
 }
 
-console.log('更相相减求最大公约数', subtraction(88, 72))
+// console.log('更相相减求最大公约数', subtraction(88, 72))
+
+
+/**
+ * 判断一个数字是否是2的n次幂   这里考虑一下位运算  与或非
+ */
+
+function isBinaryPower (n) {
+  return (n & (n - 1)) === 0
+}
+
+
+/**
+ *  寻找无序数组中排序之后相邻元素的最大值  采用的是桶排序算法实现的
+ */
+function findBigDiffer (array) {
+  class bucketItem {
+    constructor () {
+      this.min = void 0
+      this.max = void 0
+      this.hasNothing = true
+    }
+
+    add (value) {
+      this.hasNothing = false
+      if ((this.max === undefined ? this.max = value : this.max) < value) this.max = value
+      if ((this.min === undefined ? this.min = value : this.min) > value) this.min = value
+    }
+  }
+
+  let min, max
+
+  for (let i = 0; i < array.length; i++) {
+    if ((max === undefined ? max = array[i] : max) < array[i]) max = array[i]
+    if ((min === undefined ? min = array[i] : min) > array[i]) min = array[i]
+  }
+
+  const differ = max - min
+  const bucketCapacity = array.length
+  const bucket = []
+
+  for (let i = 0; i < bucketCapacity; i++) {
+    bucket.push(new bucketItem())
+  }
+
+  for (let i = 0; i < array.length; i++) {
+    const index = Math.floor((array[i] - min) / differ * (bucketCapacity - 1))
+    bucket[index].add(array[i])
+  }
+
+  let diff = 0
+  for (let i = 0; i < bucket.length - 1; i++) {
+    while (bucket[i].hasNothing) {
+      i++
+    }
+
+    const min = bucket[i]
+
+    while (bucket[i + 1].hasNothing) {
+      i++
+    }
+    const max = bucket[i + 1]
+
+    const diffTmp = max.min - min.max
+
+    diff = diffTmp > diff ? diffTmp : diff
+  }
+
+  return diff
+
+}
+
+findBigDiffer([6, 3, 9, 34, 78, 6, 10])
