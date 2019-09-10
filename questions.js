@@ -276,3 +276,28 @@ function findBigDiffer (array) {
 }
 
 findBigDiffer([6, 3, 9, 34, 78, 6, 10])
+
+
+/*
+ * 栈实现队列
+ */
+class queueBaseOnStack {
+  constructor () {
+    this.forwardStack = []
+    this.reverseStack = []
+  }
+
+  pushQueue (value) {
+    this.forwardStack.push(value)
+  }
+
+  outQueue () {
+    while (this.forwardStack.length) {
+      this.reverseStack.push(this.forwardStack.pop())
+    }
+
+    return this.reverseStack.pop()
+  }
+}
+
+const a = new queueBaseOnStack()
