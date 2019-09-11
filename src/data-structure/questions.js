@@ -304,11 +304,10 @@ const a = new queueBaseOnStack()
 
 
 /**
- * 找出一个数字的重排的下一位数字
+ * 找出一个数字的重排的下一位数字  // 未完成。  以后完善。  没有耐心了。 抱歉
+ * 
  */
 function getNextReorderNumber (number) {
-  let index = -2
-
   function valid (strs) {
     let i = 0
 
@@ -320,11 +319,43 @@ function getNextReorderNumber (number) {
     return true
   }
 
+  function convert (array) {
+    let sample = array[0]
+    let tmp
+    let index
 
-  const arr = (number + '').split('')
-  let subNumber = arr.slice(index)
-  let i = 0
-  while (valid(subNumber) && i < subNumber.length) {
-    i
+    for (let i = 1; i < array.length; i++) {
+      if (tmp !== undefined) {
+        if (sample < array[i] && array[i] < tmp) {
+          tmp = array[i]
+          index = i
+        }
+      } else {
+        if (sample < array[i]) {
+          tmp = array[i]
+          index = i
+        }
+      }
+    }
+
+    tmp = array[index]
+    array[index] = array[0]
+    array[0] = tmp
+
+    return array
+  }
+
+
+
+  const arr = String(number).split('')
+  let index = -2
+
+  while (index + arr.length !== 0) {
+    const subArr = arr.slice(index)
+
+    if (!valid(subArr)) break
+
+    index--
   }
 }
+
