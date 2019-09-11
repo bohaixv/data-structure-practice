@@ -301,3 +301,30 @@ class queueBaseOnStack {
 }
 
 const a = new queueBaseOnStack()
+
+
+/**
+ * 找出一个数字的重排的下一位数字
+ */
+function getNextReorderNumber (number) {
+  let index = -2
+
+  function valid (strs) {
+    let i = 0
+
+    while (i < strs.length - 1) {
+      if (strs[i] < strs[i + 1]) return false
+      i++
+    }
+
+    return true
+  }
+
+
+  const arr = (number + '').split('')
+  let subNumber = arr.slice(index)
+  let i = 0
+  while (valid(subNumber) && i < subNumber.length) {
+    i
+  }
+}
