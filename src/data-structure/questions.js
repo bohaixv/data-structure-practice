@@ -377,5 +377,3 @@ function getMinNumber (n, k = 1) {
     ? result
     : getMinNumber(result, k - 1)
 }
-
-console.log(getMinNumber(3549, 1))
