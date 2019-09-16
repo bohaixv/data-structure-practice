@@ -377,3 +377,33 @@ function getMinNumber (n, k = 1) {
     ? result
     : getMinNumber(result, k - 1)
 }
+
+function getMinNumberQueue (n, k = 1) {
+  const strs = String(n).split('')
+  const queue = []
+
+  const count = countGenarator(k)
+
+  for (let i = 0; i < strs.length; i++) {
+    queue.push(strs[i])
+    while (queue[queue.length - 1] > strs[i + 1] && count()) {
+      queue.pop()
+    }
+  }
+
+  while (count()) {
+    queue.pop()
+  }
+
+  const result = queue.join('')
+  return result
+}
+
+function countGenarator (n = 1) {
+  let number = n
+  return function _count () {
+    number--
+    if (number >= 0) return true
+    return false
+  }
+}
