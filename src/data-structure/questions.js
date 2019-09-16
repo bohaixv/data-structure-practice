@@ -359,3 +359,23 @@ function getNextReorderNumber (number) {
   }
 }
 
+
+/**
+ * 数字n 去掉k个数字保证最终数字尽量小
+ */
+function getMinNumber (n, k = 1) {
+  const strs = String(n).split('')
+  let mutateIndex
+  for (let i = 0; i < strs.length; i++) {
+    mutateIndex = i
+
+    if (strs[i] > strs[i + 1]) break
+  }
+
+  const result = (strs.splice(mutateIndex, 1), strs).join('')
+  return k === 1
+    ? result
+    : getMinNumber(result, k - 1)
+}
+
+console.log(getMinNumber(3549, 1))
