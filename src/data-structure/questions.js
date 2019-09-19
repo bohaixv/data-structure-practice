@@ -407,3 +407,30 @@ function countGenarator (n = 1) {
     return false
   }
 }
+
+/**
+ * 加法运算
+ */
+function addition (a, b) {
+  const numberOne = String(a).split('')
+  const numberTwo = String(b).split('')
+
+  const result = []
+  let additive = 0
+
+  while (numberOne.length || numberTwo.length) {
+    const one = numberOne.pop() || 0
+    const two = numberTwo.pop() || 0
+    const sum = +one + +two + additive
+    const currentNumber = sum % 10
+
+    additive = sum >= 10 ? 1 : 0
+    result.unshift(currentNumber)
+  }
+
+  if (additive) result.unshift(additive)
+
+  return result.join('')
+}
+
+console.log(addition('99999', '11118645431'))
