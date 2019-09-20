@@ -409,7 +409,8 @@ function countGenarator (n = 1) {
 }
 
 /**
- * 加法运算
+ * 加法运算   // 优化方式： 我们没有必要将每个数字挨个拆分出来。可以将找出当前程序可以存储的最大位数。按照该位数进行拆分
+ * javascript中最大安全整数是 2^53 - 1  这个数
  */
 function addition (a, b) {
   const numberOne = String(a).split('')
@@ -433,4 +434,88 @@ function addition (a, b) {
   return result.join('')
 }
 
-console.log(addition('99999', '11118645431'))
+/**
+ * 金矿问题 动态规划
+ * w 总共有多少人
+ * p[] 金矿所需人
+ * g[] 金矿对应kg
+ * n 可选金矿数量
+ */
+function makeMoreGold (w, p, g, n) {
+  if (w === 0 || n === 0) return 0
+  if (w < p[n - 1]) return makeMoreGold(w, p, g, n - 1)
+
+  return Math.max(makeMoreGold(w, p, g, n - 1), makeMoreGold(w - p[n - 1], p, g, n - 1) + g[n - 1])
+}
+
+// const goldNeedPeople = [5, 5, 3, 4, 3]
+// const goldStack = [400, 500, 200, 300, 350]
+// const peopleCount = 10
+// console.log(makeMoreGold(peopleCount, goldNeedPeople, goldStack, goldStack.length))
+
+/**
+ * 动态规划
+ * 将一个数组分成两部分，两部分的sum 相等   // 存在问题
+ */
+function splitArrayIntoTwoPartion (array) {
+  let sum = 0
+  for (let i = 0; i < array.length; i++) {
+    sum += array[i]
+  }
+  if (sum % 2 !== 0) return false
+
+
+  return equalitable(array, sum / 2)
+}
+
+/**
+ * array 包含的数字
+ * sum 限制量
+ * n 可以放的数量
+ */
+function equalitable (array, sum, n = array.length) {
+  if (sum === 0) return true
+  if (n === 0) return false
+
+  if (sum < array[n - 1]) return equalitable(array, sum, n - 1)
+
+  return equalitable(array, sum, n - 1) || equalitable(array, sum - array[n - 1], n - 1)
+}
+// console.log(splitArrayIntoTwoPartion([10, 20, 30, 40, 50]))
+
+/**
+ * 例子： 给出一个字符串'ababd'  output ：aba || bab  找出字符串中最长的回文
+ */
+function longestPalindrome (str, left, right, result) {
+  if (left === right) return
+  const subStr = str.slice(left, right)
+  if (validPalind(subStr)) {
+    if (subStr.length === 1 || subStr.length === 0) return
+    result.push(str.slice(left, right))
+  }
+
+  longestPalindrome(str, left + 1, right, result)
+  longestPalindrome(str, left, right - 1, result)
+}
+
+function validPalind (str) {
+  for (let i = 0; i < Math.floor(str.length / 2); i++) {
+    if (str.charAt(i) !== str.charAt(str.length - 1 - i)) return false
+  }
+  return true
+}
+
+
+const result = []
+
+longestPalindrome('abcbd', 0, 5, result)
+
+console.log(result)
+
+// 昨天看到一个面试题：
+// 在数组中找到 数组中两个值等于目标值的组合，返回数组，数组中包含其对应的的索引
+// 示例：
+// let arr = [1,2,3,4];
+// 结果：
+// target : 5
+// [[0,3],[1,2],[4,0]]
