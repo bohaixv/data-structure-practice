@@ -507,8 +507,8 @@ function validPalind (str) {
 
 
 const result = []
-
-longestPalindrome('abcbd', 0, 5, result)
+const str = 'abcbcbd'
+longestPalindrome(str, 0, str.length, result)
 
 console.log(result)
 
