@@ -511,6 +511,7 @@ const str = 'abacdfgdcaba'
 longestPalindrome(str, 0, str.length, result)
 
 /**
+ * 判断字符串是否是回文
  * 动态规划版
  */
 function dynamicPalindrome (strs, si, sj) {
@@ -524,6 +525,41 @@ function dynamicPalindrome (strs, si, sj) {
 
 console.log(result)
 
+/**
+ * 给出一个数组，有一个数字只重复一次，其他数字都是重复了两次。 找出重复一次的数字
+ */
+function findUniqueRepeatOnce (array) {
+  return array.reduce((pre, next) => pre ^ next)
+}
+
+/**
+ * 给出一个数字，有两个数字只重复一次，其他数字都是重复了两次，找出这两个数字
+ */
+function findUniqueRepeatTwice (array) {
+  let diffOr = array.reduce((pre, next) => pre ^ next)
+
+  diffOr = diffOr
+    .toString(2)
+    .split('')
+    .reverse()
+
+  const index = diffOr.indexOf('1')
+  let one
+  let two
+  array.forEach(item => {
+    item
+      .toString(2)
+      .split('')
+      .reverse()[index] === '1'
+      ? one ? one = one ^ item : one = item
+      : two ? two = two ^ item : two = item
+  })
+
+  return [one, two]
+}
+
+console.log(findUniqueRepeatTwice([1, 2, 3, 4, 5, 6, 7, 8, 9, 7, 6, 5, 4, 3, 2, 1]))
+
 // 昨天看到一个面试题：
 // 在数组中找到 数组中两个值等于目标值的组合，返回数组，数组中包含其对应的的索引
 // 示例：
@@ -531,3 +567,5 @@ console.log(result)
 // 结果：
 // target : 5
 // [[0,3],[1,2],[4,0]]
+
+
