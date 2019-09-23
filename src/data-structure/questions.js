@@ -507,8 +507,20 @@ function validPalind (str) {
 
 
 const result = []
-const str = 'abcbcbd'
+const str = 'abacdfgdcaba'
 longestPalindrome(str, 0, str.length, result)
+
+/**
+ * 动态规划版
+ */
+function dynamicPalindrome (strs, si, sj) {
+  if (si === sj) return true
+  if (si + 1 === sj) {
+    return strs[si] === strs[sj]
+  }
+
+  return dynamicPalindrome(strs, si + 1, sj - 1) && strs[si] === strs[sj]
+}
 
 console.log(result)
 
