@@ -558,7 +558,6 @@ function findUniqueRepeatTwice (array) {
   return [one, two]
 }
 
-console.log(findUniqueRepeatTwice([1, 2, 3, 4, 5, 6, 7, 8, 9, 7, 6, 5, 4, 3, 2, 1]))
 
 // 昨天看到一个面试题：
 // 在数组中找到 数组中两个值等于目标值的组合，返回数组，数组中包含其对应的的索引
@@ -569,3 +568,41 @@ console.log(findUniqueRepeatTwice([1, 2, 3, 4, 5, 6, 7, 8, 9, 7, 6, 5, 4, 3, 2, 
 // [[0,3],[1,2],[4,0]]
 
 
+/***
+ * KMP问题   link: https://mp.weixin.qq.com/s/kCjRuY6ygYJWWX5HPVLa5A
+ */
+
+class KMP {
+  constructor (pattern) {
+    this.pat = new Array(pattern.length)
+      .fill(null)
+      .map(item => new Array(256).fill(0))
+
+    this.pat[0][pattern[0].charCodeAt()] = 1
+    let X = 0
+
+    for (let i = 1; i < pattern.length; i++) {
+      for (let c = 0; c < 256; c++) {
+        if (pattern[i].charCodeAt() === c) this.pat[i][c] = i + 1
+        else this.pat[i][c] = this.pat[X][c]
+      }
+
+      X = this.pat[X][pattern[i].charCodeAt()]  // 点睛之笔  我没看懂
+    }
+  }
+
+  search (string) {
+    let j = 0
+    for (let i = 0; i < string.length; i++) {
+      j = this.pat[j][string[i].charCodeAt()]
+
+      if (j === this.pat.length) return i - this.pat.length + 1
+    }
+
+    return -1
+  }
+}
+
+const k = new KMP('ababc')
+
+console.log(k.search('ccdsfsaaaababcppp'))
