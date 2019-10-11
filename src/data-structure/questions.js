@@ -468,10 +468,30 @@ function makeMoreGoldCache (personCount, goldNeedPeoples, goldValues, goldCount)
   return result[goldCount][personCount]
 }
 
+/**
+ * 进一步优化上部分的动态规划阿  
+ * 这个就很有灵性了啊。  
+ * 因为我们在求下一个状态的时候都是依赖着上一层的状态，只是依赖上一层的状态，所以没必要保持整个的数据结构
+ * 所以我们只保证一层数据就ok了  
+ */
+function makeMoreGoldCacheOptimazition (personCount, goldNeedPeoples, goldValues, goldCount) {
+  const result = new Array(personCount + 1).fill(0)
+
+  for (let i = 1; i <= goldCount; i++) {
+    for (let j = personCount; j >= 1; j--) {
+      if (j >= goldNeedPeoples[i - 1]) {
+        result[j] = Math.max(result[j], result[j - goldNeedPeoples[i - 1]] + goldValues[i - 1])
+      }
+    }
+  }
+
+  return result[personCount]
+}
+
 const goldNeedPeople = [5, 5, 3, 4, 3]
 const goldStack = [400, 500, 200, 300, 350]
 const peopleCount = 10
-console.log(makeMoreGoldCache(peopleCount, goldNeedPeople, goldStack, goldStack.length))
+console.log(makeMoreGoldCacheOptimazition(peopleCount, goldNeedPeople, goldStack, goldStack.length))
 
 /**
  * 动态规划
