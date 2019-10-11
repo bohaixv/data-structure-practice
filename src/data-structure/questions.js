@@ -447,11 +447,31 @@ function makeMoreGold (w, p, g, n) {
 
   return Math.max(makeMoreGold(w, p, g, n - 1), makeMoreGold(w - p[n - 1], p, g, n - 1) + g[n - 1])
 }
+/**
+ * 因为递归的话会做很多无用的计算，所以有了一个带有缓存的版本 cache version
+ */
+function makeMoreGoldCache (personCount, goldNeedPeoples, goldValues, goldCount) {
+  const result = new Array(goldCount + 1)
+    .fill(null)
+    .map(item => new Array(personCount + 1).fill(0))
 
-// const goldNeedPeople = [5, 5, 3, 4, 3]
-// const goldStack = [400, 500, 200, 300, 350]
-// const peopleCount = 10
-// console.log(makeMoreGold(peopleCount, goldNeedPeople, goldStack, goldStack.length))
+  for (let i = 1; i <= goldCount; i++) {
+    for (let j = 1; j <= personCount; j++) {
+      if (j < goldNeedPeoples[i - 1]) {
+        result[i][j] = result[i - 1][j]
+      } else {
+        result[i][j] = Math.max(result[i - 1][j], result[i - 1][j - goldNeedPeoples[i - 1]] + goldValues[i - 1])
+      }
+    }
+  }
+
+  return result[goldCount][personCount]
+}
+
+const goldNeedPeople = [5, 5, 3, 4, 3]
+const goldStack = [400, 500, 200, 300, 350]
+const peopleCount = 10
+console.log(makeMoreGoldCache(peopleCount, goldNeedPeople, goldStack, goldStack.length))
 
 /**
  * 动态规划
@@ -506,9 +526,9 @@ function validPalind (str) {
 }
 
 
-const result = []
-const str = 'abacdfgdcaba'
-longestPalindrome(str, 0, str.length, result)
+// const result = []
+// const str = 'abacdfgdcaba'
+// longestPalindrome(str, 0, str.length, result)
 
 /**
  * 判断字符串是否是回文
@@ -523,7 +543,7 @@ function dynamicPalindrome (strs, si, sj) {
   return dynamicPalindrome(strs, si + 1, sj - 1) && strs[si] === strs[sj]
 }
 
-console.log(result)
+// console.log(result)
 
 /**
  * 给出一个数组，有一个数字只重复一次，其他数字都是重复了两次。 找出重复一次的数字
@@ -587,7 +607,7 @@ class KMP {
         else this.pat[i][c] = this.pat[X][c]
       }
 
-      X = this.pat[X][pattern[i].charCodeAt()]  // 点睛之笔  我没看懂
+      X = this.pat[X][pattern[i].charCodeAt()]  // 点睛之笔  我没看懂   因为X是后续的状态跟进。 然后保持和当前状态后置的一个时序进行跟进。
     }
   }
 
@@ -603,6 +623,6 @@ class KMP {
   }
 }
 
-const k = new KMP('ababc')
+// const k = new KMP('ababc')
 
-console.log(k.search('ccdsfsaaaababcppp'))
+// console.log(k.search('ccdsfsaaaababcppp'))
