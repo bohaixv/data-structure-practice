@@ -646,3 +646,49 @@ class KMP {
 // const k = new KMP('ababc')
 
 // console.log(k.search('ccdsfsaaaababcppp'))
+
+
+
+/***
+ * bitmap
+ * 
+ * 
+ */
+
+class Bitmap {
+  constructor (size) {
+    this.size = size
+    this.words = new Array(this.getWordIndex(size - 1) + 1).fill(0)
+  }
+
+  getWordIndex (index) {
+    return index >> 6
+  }
+
+  getBit (index) {
+    if (index < 0 || index > this.size) throw new Error('超过bitmap最大有效范围')
+
+    const wordIndex = this.getWordIndex(index)
+    return (this.words[wordIndex] & (1 << index)) !== 0
+  }
+
+  setBit (index) {
+    if (index < 0 || index > this.size) throw new Error('超过bitmap最大有效范围')
+
+    const wordIndex = this.getWordIndex(index)
+    this.words[wordIndex] |= (1 << index)
+  }
+}
+
+const bit = new Bitmap(128)
+
+bit.setBit(128)
+bit.setBit(122)
+bit.setBit(1)
+bit.setBit(37)
+
+console.log(bit.getBit(1))
+console.log(bit.getBit(128))
+console.log(bit.getBit(32))
+console.log(bit.getBit(37))
+console.log(bit.getBit(122))
