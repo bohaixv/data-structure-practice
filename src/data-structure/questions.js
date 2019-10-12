@@ -680,15 +680,114 @@ class Bitmap {
   }
 }
 
-const bit = new Bitmap(128)
+// const bit = new Bitmap(128)
 
-bit.setBit(128)
-bit.setBit(122)
-bit.setBit(1)
-bit.setBit(37)
+// bit.setBit(128)
+// bit.setBit(122)
+// bit.setBit(1)
+// bit.setBit(37)
 
-console.log(bit.getBit(1))
-console.log(bit.getBit(128))
-console.log(bit.getBit(32))
-console.log(bit.getBit(37))
-console.log(bit.getBit(122))
+// console.log(bit.getBit(1))
+// console.log(bit.getBit(128))
+// console.log(bit.getBit(32))
+// console.log(bit.getBit(37))
+// console.log(bit.getBit(122))
+
+
+/**
+ * LRU least recently used 原理
+ * 双向链表存储数据
+ * 只存储limit个数据，有用到的时候就会将数据置前这样被用到的话就不会被会替换掉
+ * 也正是lru的意思啊。经常被用到的就会被缓存，经常不被用到就不会被缓存
+ */
+
+class HashMapNode {
+  constructor (key, value) {
+    this.key = key
+    this.value = value
+    this.pre = this.next = null
+  }
+}
+class LRU {
+  constructor (limit) {
+    this.limit = limit
+    this.hashMap = new Map()
+    this.head = this.end = null
+  }
+
+  get (key) {
+    const node = this.hashMap.get(key)
+    if (!node) return null
+
+    this.refreshNode(node)
+    return node
+  }
+
+  put (key, value) {
+    const node = this.hashMap.get(key)
+    if (!node) {
+      if (this.hashMap.size >= this.limit) {
+        const oldKey = this.removeNode(this.head)
+        this.hashMap.delete(oldKey)
+      }
+      const newNode = new HashMapNode(key, value)
+      this.addNode(newNode)
+      this.hashMap.set(key, newNode)
+    } else {
+      node.value = value
+      this.refreshNode(node)
+    }
+  }
+
+  remove (key) {
+    const node = this.hashMap.get(key)
+    this.removeNode(node)
+    this.hashMap.delete(key)
+  }
+
+  refreshNode (node) {
+    if (node === this.end) return
+
+    this.removeNode(node)
+    this.addNode(node)
+  }
+
+  removeNode (node) {
+    if (node === this.head && node === this.end) {
+      this.head = null
+      this.end = null
+    } else if (node === this.end) {
+      this.end = this.end.pre
+      this.end.next = null
+    } else if (node === this.head) {
+      this.head = this.head.next
+      this.head.pre = null
+    } else {
+      node.pre.next = node.next
+      node.next.pre = node.pre
+    }
+    return node.key
+  }
+
+  addNode (node) {
+    if (this.end !== null) {
+      this.end.next = node
+      node.pre = this.end
+      node.next = null
+    }
+    this.end = node
+    if (this.head === null) this.head = node
+  }
+}
+
+const lruCache = new LRU(5)
+lruCache.put('001', '用户1')
+lruCache.put('002', '用户2')
+lruCache.put('003', '用户3')
+lruCache.put('004', '用户4')
+lruCache.put('005', '用户5')
+lruCache.get('002')
+lruCache.put('004', '用户4更新')
+lruCache.put('006', '用户6')
+console.log(lruCache.get('001'))
+console.log(lruCache.get('006'))
