@@ -780,14 +780,80 @@ class LRU {
   }
 }
 
-const lruCache = new LRU(5)
-lruCache.put('001', '用户1')
-lruCache.put('002', '用户2')
-lruCache.put('003', '用户3')
-lruCache.put('004', '用户4')
-lruCache.put('005', '用户5')
-lruCache.get('002')
-lruCache.put('004', '用户4更新')
-lruCache.put('006', '用户6')
-console.log(lruCache.get('001'))
-console.log(lruCache.get('006'))
+// const lruCache = new LRU(5)
+// lruCache.put('001', '用户1')
+// lruCache.put('002', '用户2')
+// lruCache.put('003', '用户3')
+// lruCache.put('004', '用户4')
+// lruCache.put('005', '用户5')
+// lruCache.get('002')
+// lruCache.put('004', '用户4更新')
+// lruCache.put('006', '用户6')
+// console.log(lruCache.get('001'))
+// console.log(lruCache.get('006'))
+
+/**
+ * A星寻路
+ */
+class Grid {
+  constructor (x, y) {
+    this.x = x
+    this.y = y
+    this.f = this.g = this.h = null
+  }
+
+  initGrid (parent, end) {
+    this.parent = parent
+    if (parent != null) {
+      this.g = parent.g + 1
+    } else {
+      this.g = 1
+    }
+    this.h = Math.abs(end.x - this.x) + Math.abs(end.y - this.y)
+    this.f = this.g + this.h
+  }
+}
+
+function aStarSearch (start, end, maze) {
+  const openList = new Array()
+  const closeList = new Array()
+  openList.push(start)
+
+  while (openList.length) {
+    // 找到最小的grid
+    const currentIndex = openList.reduce((pre, next, index) => {
+      const index = pre.f > next.f ? index - 1 : index
+
+      return index >= 0 ? index : 0
+    }, currentGrid[0].f)
+
+    const [currentGrid] = openList.splice(currentIndex, 1)
+    // closeList 存在的意义就在于缓存住已经对比过得数据
+    closeList.push(currentGrid)
+
+    [{ x: 1, y: 0 }, { x: -1, y: 0 }, { x: 0, y: 1 }, { x: 0, y: -1 }]
+      // 找到最小grid这一步的neighbours
+      .reduce((pre, next) => {
+        const x = currentGrid.x + next.x
+        const y = currentGrid.y + next.y
+        if (x < 0 || x >= maze.length || y < 0 || y >= maze[0].length) return pre
+        if (maze[x][y] === 1) return pre
+        if (openList.some(item => item.x === x && item.y === y)) return pre
+        if (closeList.some(item => item.x === x && item.y === y)) return pre
+
+        pre.push(new Grid(x, y))
+      }, [])
+      // 将不重复的元素推进openList
+      .forEach(item => {
+        if (openList.some(itemInner => itemInner.x === item.x && itemInner.y === item.y)) {
+          item.initGrid(currentGrid, end)
+          openList.push(item)
+        }
+      })
+
+    const gridResult = openList.find(item => item.x === end.x && item.y === end.y)
+    if (gridResult) return gridResult
+  }
+
+  return null
+}
