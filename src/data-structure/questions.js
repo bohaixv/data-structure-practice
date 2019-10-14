@@ -857,3 +857,22 @@ function aStarSearch (start, end, maze) {
 
   return null
 }
+
+/**
+ * 红包随机分配问题
+ */
+function devideRedPackage (totalMoney, peopleCount) {
+  const result = []
+  const peopleAllCount = peopleCount
+
+  for (let i = 0; i < peopleAllCount - 1; i++) {
+    const amount = Math.random() * (totalMoney / peopleCount * 2)   // 全部金钱除以人数 乘以2  最终得到的是相对平均的
+    totalMoney -= amount
+    peopleCount--
+    result.push(amount)
+  }
+
+  result.push(totalMoney)
+  return result
+}
+console.log(devideRedPackage(1000, 10))
