@@ -875,4 +875,36 @@ function devideRedPackage (totalMoney, peopleCount) {
   result.push(totalMoney)
   return result
 }
-console.log(devideRedPackage(1000, 10))
+// console.log(devideRedPackage(1000, 10))
+
+/***
+ * 凑零钱问题  动态规划初级问题 分为三个阶段的理解
+ * 
+ */
+function gatherSmallChange (coins, sum) {
+  if (sum <= 0) return 0
+
+  return Math.min(
+    ...coins.map(item => {
+      return gatherSmallChange(coins, sum - item)
+    })
+  ) + 1
+}
+
+function gatherSmallChangeDynamic (coins, sum) {
+  const dp = new Array(sum)
+
+  dp[0] = 0
+
+  for (let i = 1; i <= sum; i++) {
+    dp[i] = Math.min(
+      ...coins.map(item => {
+        return dp[i - item] > 0 ? dp[i - item] : 0
+      })
+    ) + 1
+  }
+
+  return dp[sum]
+}
+
+console.log('凑11块钱', gatherSmallChangeDynamic([1, 2, 5], 11))
