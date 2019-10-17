@@ -963,4 +963,46 @@ function uniquePathDynamicOptimazition (x, y) {
   return result[x]
 }
 
-console.log('独一无二的路径', uniquePathDynamicOptimazition(3, 2))
+// console.log('独一无二的路径', uniquePathDynamicOptimazition(3, 2))
+
+/**
+ * 路径问题升级版 https://leetcode.com/problems/unique-paths-ii/
+ */
+function uniquePathPlus (obstacleGrid, x = obstacleGrid.length, y = obstacleGrid[0].length) {
+  if (x === 1 && y === 1) return 1
+
+  return
+}
+
+/**
+ * 检查一个字符串的最长回文 https://leetcode.com/problems/longest-palindromic-substring/solution/
+ */
+function longestPalindromicDynamic (str) {
+  const result = new Array(str.length)
+    .fill(null)
+    .map(item => new Array())
+
+  for (let i = str.length - 1; i >= 0; i--) {
+    for (let j = i; j < str.length; j++) {
+      if (i + 1 === j) {
+        result[i][j] = str[i] === str[j]
+      } else if (i === j) {
+        result[i][j] = true
+      } else {
+        result[i][j] = result[i + 1][j - 1] && str[i] === str[j]
+      }
+    }
+  }
+
+  return result.reduce((pre, next, index) => {
+    pre.push(...next.reduce((preInner, nextInner, indexInner) => {
+      if (nextInner) {
+        preInner.push([indexInner, index])
+      }
+      return preInner
+    }, []))
+    return pre
+  }, [])
+}
+
+console.log('最长回文：', longestPalindromicDynamic('babad'))
