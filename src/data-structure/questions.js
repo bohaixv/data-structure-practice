@@ -907,4 +907,24 @@ function gatherSmallChangeDynamic (coins, sum) {
   return dp[sum]
 }
 
-console.log('凑11块钱', gatherSmallChangeDynamic([1, 2, 5], 11))
+// console.log('凑11块钱', gatherSmallChangeDynamic([1, 2, 5], 11))
+
+/**
+ * 寻找最长递增子序列
+ */
+function maxIncreaseSubset (array, currentIndex = array.length - 1) {
+  if (currentIndex === 0) return 1
+
+  return Math.max(...array
+    .reduce((pre, next, index) => {
+      if (index < currentIndex && next < array[currentIndex]) {
+        pre.push(maxIncreaseSubset(array, index))
+      }
+      return pre
+    }, [0])
+  ) + 1
+}
+
+console.log('寻找最长递增子序列', Math.max(...[10, 9, 2, 5, 3, 7, 33, 44, 55, 101, 18, 5].map((item, index, array) => {
+  return maxIncreaseSubset(array, index)
+})))
