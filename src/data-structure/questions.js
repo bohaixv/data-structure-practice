@@ -925,6 +925,42 @@ function maxIncreaseSubset (array, currentIndex = array.length - 1) {
   ) + 1
 }
 
-console.log('寻找最长递增子序列', Math.max(...[10, 9, 2, 5, 3, 7, 33, 44, 55, 101, 18, 5].map((item, index, array) => {
-  return maxIncreaseSubset(array, index)
-})))
+// console.log('寻找最长递增子序列', Math.max(...[10, 9, 2, 5, 3, 7, 33, 44, 55, 101, 18, 5].map((item, index, array) => {
+//   return maxIncreaseSubset(array, index)
+// })))
+
+/**
+ * 动态规划问题 https://leetcode.com/problems/unique-paths/
+ */
+function uniquePath (x, y) {
+  if (x === 1 && y === 1) return 1
+
+  return (x - 1 >= 1 ? uniquePath(x - 1, y) : 0) + (y - 1 >= 1 ? uniquePath(x, y - 1) : 0)
+}
+
+function uniquePathDynamic (x, y) {
+  const result = new Array(y + 1).fill(null)
+    .map(item => new Array(x + 1).fill(null))
+
+  for (let i = 1; i <= y; i++) {
+    for (let j = 1; j <= x; j++) {
+      result[i][j] = (i - 1 >= 1 ? result[i - 1][j] : 0) + (j - 1 >= 1 ? result[i][j - 1] : 0)
+      if (i === 1 && j === 1) result[i][j] = 1
+    }
+  }
+  return result[y][x]
+}
+
+function uniquePathDynamicOptimazition (x, y) {
+  const result = new Array(x + 1).fill(null)
+
+  for (let i = 1; i <= y; i++) {
+    for (let j = 1; j <= x; j++) {
+      result[j] = (i - 1 >= 1 ? result[j] : 0) + (j - 1 >= 1 ? result[j - 1] : 0)
+      if (i === 1 && j === 1) result[j] = 1
+    }
+  }
+  return result[x]
+}
+
+console.log('独一无二的路径', uniquePathDynamicOptimazition(3, 2))
