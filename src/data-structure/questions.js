@@ -491,7 +491,7 @@ function makeMoreGoldCacheOptimazition (personCount, goldNeedPeoples, goldValues
 const goldNeedPeople = [5, 5, 3, 4, 3]
 const goldStack = [400, 500, 200, 300, 350]
 const peopleCount = 10
-console.log(makeMoreGoldCacheOptimazition(peopleCount, goldNeedPeople, goldStack, goldStack.length))
+// console.log(makeMoreGoldCacheOptimazition(peopleCount, goldNeedPeople, goldStack, goldStack.length))
 
 /**
  * 动态规划
@@ -994,15 +994,93 @@ function longestPalindromicDynamic (str) {
     }
   }
 
-  return result.reduce((pre, next, index) => {
-    pre.push(...next.reduce((preInner, nextInner, indexInner) => {
+  const maxPalindromic = result.reduce((pre, next, index) => {
+    return next.reduce((preInner, nextInner, indexInner) => {
       if (nextInner) {
-        preInner.push([indexInner, index])
+        if (preInner.length < Math.abs(indexInner - index + 1)) {
+          return {
+            length: Math.abs(indexInner - index),
+            start: index,
+            end: indexInner
+          }
+        }
+        return preInner
       }
       return preInner
-    }, []))
-    return pre
-  }, [])
+    }, pre)
+  }, {
+    length: 1,
+    index: 0,
+    end: 0
+  })
+
+  return str.slice(maxPalindromic.start, maxPalindromic.end + 1)
 }
 
-console.log('最长回文：', longestPalindromicDynamic('babad'))
+// console.log('最长回文：', longestPalindromicDynamic('cbbd'))
+
+/**
+ * Regular Expression Matching   https://leetcode.com/problems/regular-expression-matching/
+ */   //  not finish   还得认真重构一下
+function regularMatch (str, pattern) {
+  function generatePattern (pattern) {
+    const cycleStack = []
+    while (pattern.includes('*')) {
+      pattern = pattern.replace(/.\*/, (a, index) => {
+        if (a === '.*') {
+          cycleStack.push({
+            any: true,
+            index,
+          })
+        } else {
+          cycleStack.push({
+            any: false,
+            index,
+            code: a[0]
+          })
+        }
+        return ''
+      })
+    }
+
+    const patternExpressions = new Array(pattern.length)
+      .fill(null)
+      .map(item => new Array(256).fill(0))
+
+    cycleStack.forEach(item => {
+      if (item.any) {
+        patternExpressions[item.index].fill(item.index)
+      } else {
+        patternExpressions[item.index][item.code.charCodeAt()] = item.index
+      }
+    })
+
+    for (let i = 0; i < pattern.length; i++) {
+      if (pattern[i] === '.') {
+        patternExpressions[i].fill(i + 1)
+      } else {
+        patternExpressions[i][pattern[i].charCodeAt()] = i + 1
+      }
+    }
+
+    return { pattern, patternExpressions }
+  }
+
+  const { pattern: patternProceeded, patternExpressions } = generatePattern(pattern)
+  let currentIndex = 0
+  for (let i = 0; i < str.length; i++) {
+    currentIndex = patternExpressions[currentIndex][str[i].charCodeAt()]
+
+    if (currentIndex === patternExpressions.length) {
+      if (i === str.length - 1) {
+        return true
+      } else {
+        return false
+      }
+    }
+  }
+
+  return false
+}
+
+console.log('匹配摸式：', regularMatch('abc', 'ab*c'))
