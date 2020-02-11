@@ -78,6 +78,24 @@ function preOrderTraversalNotRecur (node) {
 // console.log('前序遍历不用递归')
 // preOrderTraversalNotRecur(tree)
 
+
+function preOrderT (tree) {
+  const queue = []
+
+  while (tree || queue.length) {
+    while (tree) {
+      queue.push(tree)
+      // pre
+      tree = tree.left
+    }
+
+    if (queue.length) {
+      tree = queue.pop()
+      // midd
+      tree = tree.right
+    }
+  }
+}
 /**
  * 后序遍历的思路： 我们可以利用栈存放一个这样的循序的数据： 左 => 右 => 根  或者  右 => 左 => 根
  * @param {Node} node 
@@ -108,6 +126,27 @@ function middleOrderTraversalNotRecur (node) {
 // console.log('后续遍历不用递归')
 // middleOrderTraversalNotRecur(tree)
 
+
+function backOrder (node) {
+  const queue = []
+  const backQueue = []
+
+  while (node || queue.length) {
+    while (node) {
+      queue.push(node)
+      backQueue.push(node)
+      node = node.left
+    }
+
+    if (queue.length) {
+      node = queue.pop()
+      node = node.left
+    }
+  }
+
+  // foreach backqueue
+
+}
 function layerTraversalNotRecur (node) {
   const queue = []
 
@@ -124,6 +163,19 @@ function layerTraversalNotRecur (node) {
 
 // console.log('层序遍历  广度优先')
 // layerTraversalNotRecur(tree)
+
+function layerTraverl (node) {
+  const queue = []
+  queue.push(node)
+
+  while (queue.length) {
+    node = queue.pop()
+    console.log(node)
+
+    if (node.left) queue.push(node.left)
+    if (node.right) queue.push(node.right)
+  }
+}
 
 function layerTraversalRecur () {
 
